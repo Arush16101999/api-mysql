@@ -8,6 +8,7 @@ const app = express();
 // allows to use json data in express
 app.use(express.json());
 app.use(cors());
+app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
   res.json("hello this is Arushan Manoharan from backend");
@@ -32,7 +33,7 @@ app.get("/employees", async (req, res) => {
     const data = await new Promise((resolve, reject) => {
       db.query("SELECT * FROM employee", (err, data) => {
         if (err) {
-          console.error("Error retrieving to get tasks:", err);
+          console.error("Error retrieving to get Employees:", err);
           reject(err);
         } else {
           resolve(data);
@@ -65,7 +66,7 @@ app.post("/employees", async (req, res) => {
     await new Promise((resolve, reject) => {
       db.query(d, [values], (err, data) => {
         if (err) {
-          console.error("Error adding task:", err);
+          console.error("Error adding Employee:", err);
           reject(err);
         } else {
           resolve(data);
@@ -111,10 +112,10 @@ app.put("/employees/:id", async (req, res) => {
     // console.log(check);
 
     // Check if the Employee with the provided ID exists
-    const existingTask = await new Promise((resolve, reject) => {
+    const existingEmployee = await new Promise((resolve, reject) => {
       db.query(check, [empId], (err, data) => {
         if (err) {
-          console.error("Error checking task existence:", err);
+          console.error("Error checking Employees existence:", err);
           reject(err);
         } else {
           resolve(data);
@@ -122,7 +123,7 @@ app.put("/employees/:id", async (req, res) => {
       });
     });
 
-    if (existingTask && existingTask.length > 0) {
+    if (existingEmployee && existingEmployee.length > 0) {
       const values = [
         req.body.empNo,
         req.body.empName,
@@ -133,12 +134,12 @@ app.put("/employees/:id", async (req, res) => {
         req.body.empStatus,
         req.body.empImage,
       ];
-      const UPDATE_TASK_QUERY =
+      const UPDATE_EMPLOYEE_QUERY =
         "UPDATE employee SET empNo = ?, empName = ?, empAdressLine1 = ?, empAddressLine2 = ?, empAddressLine3 = ?, empDataOfJoin = ?, empStatus = ?, empImage = ? WHERE id = ?";
       await new Promise((resolve, reject) => {
-        db.query(UPDATE_TASK_QUERY, [...values, empId], (err, data) => {
+        db.query(UPDATE_EMPLOYEE_QUERY, [...values, empId], (err, data) => {
           if (err) {
-            console.error("Error updating task:", err);
+            console.error("Error updating Employee:", err);
             reject(err);
           } else {
             resolve(data);
@@ -167,7 +168,7 @@ app.delete("/employees/:id", async (req, res) => {
     await new Promise((resolve, reject) => {
       db.query("DELETE FROM employee WHERE id = ?", [empId], (err, data) => {
         if (err) {
-          console.error("Error deleting task:", err);
+          console.error("Error deleting Employee:", err);
           reject(err);
         } else {
           resolve(data);
@@ -175,7 +176,7 @@ app.delete("/employees/:id", async (req, res) => {
       });
     });
 
-    return res.json("Task deleted successfully");
+    return res.json("Employee deleted successfully");
   } catch (error) {
     return res.status(500).json({ error: "Server error" });
   }
