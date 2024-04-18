@@ -8,7 +8,7 @@ const app = express();
 // allows to use json data in express
 app.use(express.json());
 app.use(cors());
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
   res.json("hello this is Arushan Manoharan from backend");
